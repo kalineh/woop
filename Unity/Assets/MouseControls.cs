@@ -74,7 +74,10 @@ public class MouseControls
         if (Input.GetMouseButtonDown(0))
         {
             hover_object.GetComponent<Renderer>().material.color = Color.blue;
+            hover_object.transform.localScale *= 2.0f;
             hover_object.GetComponent<Bouncer>().Controlled = true;
+
+            Cursor.visible = false;
 
             state = InputState.Place;
             return;
@@ -86,29 +89,38 @@ public class MouseControls
         if (!Input.GetMouseButton(0))
         {
             hover_object.GetComponent<Renderer>().material.color = Color.white;
+            hover_object.transform.localScale /= 2.0f;
             hover_object.GetComponent<Bouncer>().Controlled = false;
 
+            hover_object.GetComponent<Bouncer>().RecalculateGrid();
+
             state = InputState.Empty;
+
+            Cursor.visible = true;
 
             UpdateEmpty();
             return;
         }
 
         var disco = FindObjectOfType<Disco>();
-        var plane = new Plane(disco.Up, hover_object.transform.position.y);
+        var plane = new Plane(disco.transform.up, hover_object.transform.position.y);
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var enter = 0.0f;
-        var hit = plane.Raycast(ray, out enter);
+        float sensitivity = 0.5f;
+        float deltaX = Input.GetAxis("Mouse X") * sensitivity;
+        float deltaY = 0.0f;
+        float deltaZ = Input.GetAxis("Mouse Y") * sensitivity;
 
-        if (!hit)
-            return;
-
-        if (hit)
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            // convert point
-            Debug.DrawLine(V3._000(), plane.normal * enter);
+            deltaX = 0.0f;
+            deltaY = deltaZ;
+            deltaZ = 0.0f;
         }
+
+        hover_object.transform.position +=
+            disco.transform.right * deltaX +
+            disco.transform.up * deltaY +
+            disco.transform.forward * deltaZ;
     }
 
 }

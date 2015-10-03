@@ -34,4 +34,14 @@ public class Bouncer
             grid_y * disco.GridSize + disco.HalfGridSize
         );
     }
+
+    public void RecalculateGrid()
+    {
+        var disco = FindObjectOfType<Disco>();
+        var pos = transform.position;
+
+        grid_x = (int)(pos.x / disco.GridSize);
+        grid_y = (int)(pos.x / disco.GridSize);
+
+    }
 }
