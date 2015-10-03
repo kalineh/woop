@@ -9,5 +9,7 @@ public class Chrono
     public void Update()
     {
         CurrentTime += Time.deltaTime * Speed;
+
+        transform.localScale = V3._111() * (0.5f + 0.5f * Mathf.Abs(Mathf.Sin(CurrentTime)));
     }
 }
