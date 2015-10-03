@@ -11,11 +11,11 @@ public class DebugCamera
 
     private GameObject follow = null;
     private float orbitRotate = 0.0f; // TODO
-    private float orbitRange = 5.0f;
+    private float orbitRange = 1.5f;
 
     void Start()
     {
-        transform.position = new Vector3(0.0f, 5.0f, -10.0f);
+        transform.position = new Vector3(0.0f, 2.5f, -2.5f);
 
         DisableMainCamera();
     }

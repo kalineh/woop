@@ -47,14 +47,25 @@ public class MouseControls
         if (!obj)
             return;
 
-        if (!obj.CompareTag("Bouncer"))
+        if (obj.CompareTag("Bouncer"))
+        {
+            hover_object = obj;
+            hover_object.GetComponent<Renderer>().material.color = Color.green;
+
+            state = InputState.Hover;
             return;
+        }
 
-        hover_object = obj;
-        hover_object.GetComponent<Renderer>().material.color = Color.green;
+        if (obj.CompareTag("Palette"))
+        {
+            hover_object = obj;
+            hover_object.GetComponent<Renderer>().material.color = Color.green;
 
-        state = InputState.Hover;
+            state = InputState.Hover;
+            return;
+        }
     }
+
 
     void UpdateHover()
     {
@@ -73,9 +84,25 @@ public class MouseControls
 
         if (Input.GetMouseButtonDown(0))
         {
-            hover_object.GetComponent<Renderer>().material.color = Color.blue;
-            hover_object.transform.localScale *= 2.0f;
-            hover_object.GetComponent<Bouncer>().Controlled = true;
+            if (hover_object.CompareTag("Bouncer"))
+            {
+                hover_object.GetComponent<Renderer>().material.color = Color.blue;
+                hover_object.GetComponent<Bouncer>().Controlled = true;
+            }
+
+            if (hover_object.CompareTag("Palette"))
+            {
+                hover_object.GetComponent<Renderer>().material.color = Color.white;
+
+                var child = hover_object.GetComponent<Palette>().Spawn();
+
+                child.transform.position = hover_object.transform.position;
+
+                hover_object = child;
+
+                hover_object.GetComponent<Renderer>().material.color = Color.blue;
+                hover_object.GetComponent<Bouncer>().Controlled = true;
+            }
 
             Cursor.visible = false;
 
@@ -89,7 +116,6 @@ public class MouseControls
         if (!Input.GetMouseButton(0))
         {
             hover_object.GetComponent<Renderer>().material.color = Color.white;
-            hover_object.transform.localScale /= 2.0f;
             hover_object.GetComponent<Bouncer>().Controlled = false;
 
             hover_object.GetComponent<Bouncer>().RecalculateGrid();
