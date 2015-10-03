@@ -4,8 +4,8 @@ using UnityEditor;
 public class Bouncer
 	: MonoBehaviour
 {
-    public SfxrSynth Synth;
-    public SfxrParams Params;
+    public SfxrSynth Synth = new SfxrSynth();
+    private string SynthParamsString;
 
     float y_prev = 0.0f;
     float y_prev_prev = 0.0f;
@@ -16,13 +16,22 @@ public class Bouncer
 
     public bool Controlled = false;
 
+    void OnDisable()
+    {
+        SynthParamsString = Synth.parameters.GetSettingsString();
+    }
+
+    void OnEnable()
+    {
+        if (SynthParamsString != null)
+        {
+            Synth.parameters.SetSettingsString(SynthParamsString);
+        }
+    }
+
     void Start()
     {
-        Params = new SfxrParams();
-        Params.GeneratePickupCoin();
-
-        Synth = new SfxrSynth();
-        Synth.parameters = Params;
+        SynthParamsString = Synth.parameters.GetSettingsString();
 
         var disco = FindObjectOfType<Disco>();
 
@@ -32,11 +41,10 @@ public class Bouncer
 
     void Update()
     {
-        // TODO: fix reload issues
-        if (Synth == null)
-            Synth = new SfxrSynth() { parameters = Params, };
-
         if (Controlled)
+            return;
+
+        if (!ApplicationFocusState.Focused)
             return;
 
         var chrono = FindObjectOfType<Chrono>();
@@ -58,6 +66,10 @@ public class Bouncer
 
         if (prev_dir != dir && prev_dir > 0.0f && height > 0)
         {
+            SyncParametersFromPosition();
+
+            Synth.parameters.masterVolume = 0.5f;
+            Synth.SetParentTransform(transform);
             Synth.Play();
         }
 
@@ -65,9 +77,16 @@ public class Bouncer
         y_prev = y;
     }
 
-    void OnApplicationFocus(bool focus)
+    void SyncParametersFromPosition()
     {
-        Synth.parameters.masterVolume = focus ? 1.0f : 0.0f;
+        var disco = FindObjectOfType<Disco>();
+
+        var x = grid_x / disco.GridCountX;
+        var y = grid_y / disco.GridCountY;
+
+        Synth.parameters.lpFilterCutoff = Mathf.Lerp(0.2f, 0.9f, x);
+        Synth.parameters.hpFilterCutoff = Mathf.Lerp(0.1f, 0.9f, y);
+        Synth.parameters.masterVolume = 0.15f;
     }
 
     public void RecalculateGrid()

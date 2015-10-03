@@ -4,12 +4,27 @@ public class Palette
 	: MonoBehaviour
 {
     public GameObject Instance;
-    public SfxrParams Params;
+    public SfxrParams Params = new SfxrParams();
+    private string ParamsString;
+
+    void OnDisable()
+    {
+        ParamsString = Params.GetSettingsString();
+    }
+
+    void OnEnable()
+    {
+        if (ParamsString != null)
+        {
+            Params.SetSettingsString(ParamsString);
+        }
+    }
+
 
     void Start()
     {
-        Params = new SfxrParams();
         Params.GeneratePickupCoin();
+        ParamsString = Params.GetSettingsString();
     }
 
     public GameObject Spawn()
@@ -17,7 +32,7 @@ public class Palette
         var child = Object.Instantiate<GameObject>(Instance);
         var bouncer = child.GetComponent<Bouncer>();
 
-        bouncer.Params = Params;
+        bouncer.Synth.parameters = Params;
 
         return child;
     }
