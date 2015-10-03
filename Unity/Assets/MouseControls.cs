@@ -110,7 +110,7 @@ public class MouseControls
         float deltaY = 0.0f;
         float deltaZ = Input.GetAxis("Mouse Y") * sensitivity;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             deltaX = 0.0f;
             deltaY = deltaZ;
