@@ -6,10 +6,34 @@ public class Chrono
     public float CurrentTime = 0.0f;
     public float Speed = 1.0f;
 
+    float previous_time = 0.0f;
+    int previous_bar = -1;
+    int previous_beat = -1;
+
     public void Update()
     {
+        previous_time = CurrentTime;
         CurrentTime += Time.deltaTime * Speed;
 
         transform.localScale = V3._111() * (0.5f + 0.5f * Mathf.Abs(Mathf.Sin(CurrentTime)));
+    }
+
+    public bool IsBeat(int multiple)
+    {
+        var prev_time = CurrentTime * (1.0f / multiple);
+        var prev_beat = (int)prev_time;
+
+        var curr_time = previous_time * (1.0f / multiple);
+        var curr_beat = (int)curr_time;
+
+        return prev_beat != curr_beat;
+    }
+
+    public int GetBeatCount(int multiple)
+    {
+        var time = CurrentTime * (1.0f / multiple);
+        var beat = (int)time;
+
+        return beat;
     }
 }

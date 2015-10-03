@@ -6,9 +6,6 @@ public class Beats
     SfxrSynth synth_bar = new SfxrSynth();
     SfxrSynth synth_beat = new SfxrSynth();
 
-    int previous_bar = -1;
-    int previous_beat = -1;
-
     private string SynthBarParamsString;
     private string SynthBeatParamsString;
 
@@ -42,20 +39,12 @@ public class Beats
             return;
 
         var chrono = FindObjectOfType<Chrono>();
+        var beat = chrono.IsBeat(1);
+        var bar = chrono.IsBeat(4);
 
-        var t1 = chrono.CurrentTime;
-        var t4 = chrono.CurrentTime * 4.0f;
-
-        var bar = (int)(t1);
-        var beat = (int)(t4);
-
-        if (bar != previous_bar)
-            synth_bar.Play();
-
-        if (beat != previous_beat)
+        if (beat)
             synth_beat.Play();
-
-        previous_bar = bar;
-        previous_beat = beat;
+        if (bar)
+            synth_bar.Play();
     }
 }
