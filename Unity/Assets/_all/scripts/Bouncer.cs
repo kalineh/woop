@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
 public class Bouncer
 	: MonoBehaviour
 {
+    SfxrSynth synth;
+
+    float y_prev = 0.0f;
+    float y_prev_prev = 0.0f;
+
     int height = 0;
     int grid_x = 0;
     int grid_y = 0;
@@ -11,6 +17,9 @@ public class Bouncer
 
     void Start()
     {
+        synth = new SfxrSynth();
+        synth.parameters.GeneratePickupCoin();
+
         var disco = FindObjectOfType<Disco>();
 
         grid_x = (int)Random.Range(0.0f, disco.GridCountX);
@@ -34,6 +43,23 @@ public class Bouncer
             y * height * disco.GridSize.y + offset.y,
             grid_y * disco.GridSize.z + disco.HalfGridSize.z
         );
+
+
+        var prev_dir = Mathf.Sign(y_prev_prev - y_prev);
+        var dir = Mathf.Sign(y_prev - y);
+
+        if (prev_dir != dir && prev_dir > 0.0f)
+        {
+            synth.Play();
+        }
+
+        y_prev_prev = y_prev;
+        y_prev = y;
+    }
+
+    void OnApplicationFocus(bool focus)
+    {
+        synth.parameters.masterVolume = focus ? 1.0f : 0.0f;
     }
 
     public void RecalculateGrid()
