@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class Disco
 	: MonoBehaviour
@@ -9,21 +10,25 @@ public class Disco
     public float HalfGridSize = 0.5f;
     public Vector3 Up = Vector3.up;
 
-    private int PlaneDefaultSize = 5;
+    public int GridCountX = 0;
+    public int GridCountY = 0;
 
-    public int GetGridCountX()
+    private int PlaneDefaultSize = 5;
+    private List<GameObject> items;
+
+    void Start()
     {
         var size = Vector3.Scale(V3._111() * (float)PlaneDefaultSize, transform.localScale);
         var steps = size / GridSize;
 
-        return (int)steps.x;
+        GridCountX = (int)steps.x;
+        GridCountY = (int)steps.y;
+
+        items = new List<GameObject>(GridCountX * GridCountY);
     }
 
-    public int GetGridCountY()
+    GameObject Get(int x, int y)
     {
-        var size = Vector3.Scale(V3._111() * (float)PlaneDefaultSize, transform.localScale);
-        var steps = size / GridSize;
-
-        return (int)steps.z;
+        return items[x + y * GridCountX];
     }
 }

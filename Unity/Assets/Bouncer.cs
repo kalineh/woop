@@ -3,23 +3,25 @@
 public class Bouncer
 	: MonoBehaviour
 {
-    // when placing, snap silhouette to grid
-    // when placed, spawn a bouncer
-
     int height = 0;
     int grid_x = 0;
     int grid_y = 0;
+
+    public bool Controlled = false;
 
     void Start()
     {
         var disco = FindObjectOfType<Disco>();
 
-        grid_x = (int)Random.Range(0.0f, disco.GetGridCountX());
-        grid_y = (int)Random.Range(0.0f, disco.GetGridCountX());
+        grid_x = (int)Random.Range(0.0f, disco.GridCountX);
+        grid_y = (int)Random.Range(0.0f, disco.GridCountY);
     }
 
     void Update()
     {
+        if (Controlled)
+            return;
+
         var chrono = FindObjectOfType<Chrono>();
         var disco = FindObjectOfType<Disco>();
         var collider = GetComponent<SphereCollider>();
