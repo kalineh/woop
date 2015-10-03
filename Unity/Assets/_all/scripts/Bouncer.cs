@@ -4,7 +4,8 @@ using UnityEditor;
 public class Bouncer
 	: MonoBehaviour
 {
-    SfxrSynth synth;
+    public SfxrSynth Synth;
+    public SfxrParams Params;
 
     float y_prev = 0.0f;
     float y_prev_prev = 0.0f;
@@ -17,8 +18,11 @@ public class Bouncer
 
     void Start()
     {
-        synth = new SfxrSynth();
-        synth.parameters.GeneratePickupCoin();
+        Params = new SfxrParams();
+        Params.GeneratePickupCoin();
+
+        Synth = new SfxrSynth();
+        Synth.parameters = Params;
 
         var disco = FindObjectOfType<Disco>();
 
@@ -28,6 +32,10 @@ public class Bouncer
 
     void Update()
     {
+        // TODO: fix reload issues
+        if (Synth == null)
+            Synth = new SfxrSynth() { parameters = Params, };
+
         if (Controlled)
             return;
 
@@ -48,9 +56,9 @@ public class Bouncer
         var prev_dir = Mathf.Sign(y_prev_prev - y_prev);
         var dir = Mathf.Sign(y_prev - y);
 
-        if (prev_dir != dir && prev_dir > 0.0f)
+        if (prev_dir != dir && prev_dir > 0.0f && height > 0)
         {
-            synth.Play();
+            Synth.Play();
         }
 
         y_prev_prev = y_prev;
@@ -59,7 +67,7 @@ public class Bouncer
 
     void OnApplicationFocus(bool focus)
     {
-        synth.parameters.masterVolume = focus ? 1.0f : 0.0f;
+        Synth.parameters.masterVolume = focus ? 1.0f : 0.0f;
     }
 
     public void RecalculateGrid()
