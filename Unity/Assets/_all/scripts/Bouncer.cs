@@ -50,7 +50,7 @@ public class Bouncer
         var chrono = FindObjectOfType<Chrono>();
         var disco = FindObjectOfType<Disco>();
         var collider = GetComponent<SphereCollider>();
-        var t = chrono.CurrentTime * (disco.Height - height);
+        var t = chrono.GetBeatTime(height) * (disco.Height - height);
         var y = Mathf.SmoothStep(0.0f, 1.0f, Mathf.Abs(Mathf.Sin(t)));
         var offset = transform.localScale * collider.radius;
 

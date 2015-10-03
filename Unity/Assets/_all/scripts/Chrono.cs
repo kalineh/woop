@@ -12,10 +12,15 @@ public class Chrono
 
     public void Update()
     {
+        if (!ApplicationFocusState.Focused)
+            return;
+
         previous_time = CurrentTime;
         CurrentTime += Time.deltaTime * Speed;
 
-        transform.localScale = V3._111() * (0.5f + 0.5f * Mathf.Abs(Mathf.Sin(CurrentTime)));
+        var bt = GetBeatTime(1);
+
+        transform.localScale = V3._111() * bt;
     }
 
     public bool IsBeat(int multiple)
@@ -35,5 +40,14 @@ public class Chrono
         var beat = (int)time;
 
         return beat;
+    }
+
+    public float GetBeatTime(int multiple)
+    {
+        var time = CurrentTime * (1.0f / multiple);
+        var beat = (int)time;
+        var fraction = time - (float)beat;
+
+        return Mathf.Clamp01(fraction);
     }
 }
