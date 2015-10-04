@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Chrono
 	: MonoBehaviour
@@ -7,8 +8,6 @@ public class Chrono
     public float Speed = 1.0f;
 
     float previous_time = 0.0f;
-    int previous_bar = -1;
-    int previous_beat = -1;
 
     public void Update()
     {
@@ -21,14 +20,19 @@ public class Chrono
         var bt = GetBeatTime(1);
 
         transform.localScale = V3._111() * bt;
+
+        if (IsBeat(4))
+            Debug.Log("bar");
+        else if (IsBeat(1))
+            Debug.Log("beat");
     }
 
     public bool IsBeat(int multiple)
     {
-        var prev_time = CurrentTime * (1.0f / multiple);
+        var prev_time = CurrentTime * multiple;
         var prev_beat = (int)prev_time;
 
-        var curr_time = previous_time * (1.0f / multiple);
+        var curr_time = previous_time * multiple;
         var curr_beat = (int)curr_time;
 
         return prev_beat != curr_beat;
@@ -36,7 +40,7 @@ public class Chrono
 
     public int GetBeatCount(int multiple)
     {
-        var time = CurrentTime * (1.0f / multiple);
+        var time = CurrentTime * multiple;
         var beat = (int)time;
 
         return beat;
@@ -44,7 +48,7 @@ public class Chrono
 
     public float GetBeatTime(int multiple)
     {
-        var time = CurrentTime * (1.0f / multiple);
+        var time = CurrentTime * multiple;
         var beat = (int)time;
         var fraction = time - (float)beat;
 
