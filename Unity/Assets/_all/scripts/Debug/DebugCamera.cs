@@ -10,7 +10,7 @@ public class DebugCamera
     float pitch = 0.0f;
 
     private GameObject follow = null;
-    private float orbitRotate = 0.0f; // TODO
+    //private float orbitRotate = 0.0f; // TODO
     private float orbitRange = 1.5f;
 
     void Start()
