@@ -20,19 +20,14 @@ public class Chrono
         var bt = GetBeatTime(1);
 
         transform.localScale = V3._111() * bt;
-
-        if (IsBeat(4))
-            Debug.Log("bar");
-        else if (IsBeat(1))
-            Debug.Log("beat");
     }
 
     public bool IsBeat(int multiple)
     {
-        var prev_time = CurrentTime * multiple;
+        var prev_time = previous_time * multiple;
         var prev_beat = (int)prev_time;
 
-        var curr_time = previous_time * multiple;
+        var curr_time = CurrentTime * multiple;
         var curr_beat = (int)curr_time;
 
         return prev_beat != curr_beat;
