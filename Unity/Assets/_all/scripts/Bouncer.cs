@@ -15,12 +15,7 @@ public class Bouncer
 
     void OnEnable()
     {
-        if (string.IsNullOrEmpty(SynthParamsString))
-        {
-            Synth.parameters.GeneratePickupCoin();
-            SynthParamsString = Synth.parameters.GetSettingsString();
-        }
-
+        Synth.parameters.GeneratePickupCoin();
         Synth.parameters.SetSettingsString(SynthParamsString);
     }
 
@@ -43,7 +38,8 @@ public class Bouncer
         var chrono = FindObjectOfType<Chrono>();
         var disco = FindObjectOfType<Disco>();
         var collider = GetComponent<SphereCollider>();
-        var t = chrono.GetBeatTime(Height) * (disco.Height - Height);
+        var inverse_height = disco.GridCountHigh - Height;
+        var t = chrono.GetBeatTime(inverse_height);
         var y = Mathf.Abs(Mathf.Sin(t * Mathf.PI * 2.0f * 0.5f));
         var move_height = Height * disco.GridSize.y;
         var offset = transform.localScale * collider.radius;
@@ -54,8 +50,10 @@ public class Bouncer
             GridY * disco.GridSize.z + disco.HalfGridSize.z
         );
 
+        if (Height <= 0)
+            return;
 
-        var beat = chrono.IsBeat(Height);
+        var beat = chrono.IsBeat(inverse_height);
         if (beat)
         {
             SyncParametersFromPosition();

@@ -23,9 +23,9 @@ public class Disco
         var size = Vector3.Scale(V3._111() * (float)PlaneDefaultSize, transform.localScale);
         var steps = Vector3.Scale(size, GridSize);
 
-        GridCountX = (int)(steps.x / GridSize.x) - 1;
-        GridCountY = (int)(steps.z / GridSize.z) - 1;
-        GridCountHigh = (int)(steps.y / GridSize.y) - 1;
+        GridCountX = (int)(steps.x / GridSize.x);
+        GridCountY = (int)(steps.z / GridSize.z);
+        GridCountHigh = (int)(steps.y / GridSize.y);
 
         items = new List<GameObject>(GridCountX * GridCountY);
     }

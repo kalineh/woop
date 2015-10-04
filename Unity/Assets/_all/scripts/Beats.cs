@@ -13,6 +13,10 @@ public class Beats
 
     void OnEnable()
     {
+        synth_bar.parameters.GenerateExplosion();
+        synth_note.parameters.GenerateBlipSelect();
+        synth_half.parameters.GenerateHitHurt();
+
         synth_bar.parameters.SetSettingsString(SynthBarParamsString);
         synth_note.parameters.SetSettingsString(SynthNoteParamsString);
         synth_half.parameters.SetSettingsString(SynthHalfParamsString);
@@ -20,29 +24,9 @@ public class Beats
 
     void Start()
     {
-        if (string.IsNullOrEmpty(SynthBarParamsString))
-        {
-            synth_bar.parameters.GenerateExplosion();
-            synth_bar.parameters.masterVolume = 0.05f;
-
-            SynthBarParamsString = synth_bar.parameters.GetSettingsString();
-        }
-
-        if (string.IsNullOrEmpty(SynthNoteParamsString))
-        {
-            synth_note.parameters.GeneratePickupCoin();
-            synth_note.parameters.masterVolume = 0.05f;
-
-            SynthNoteParamsString = synth_note.parameters.GetSettingsString();
-        }
-
-        if (string.IsNullOrEmpty(SynthHalfParamsString))
-        {
-            synth_half.parameters.GenerateBlipSelect();
-            synth_half.parameters.masterVolume = 0.05f;
-
-            SynthHalfParamsString = synth_half.parameters.GetSettingsString();
-        }
+        SynthBarParamsString = synth_bar.parameters.GetSettingsString();
+        SynthNoteParamsString = synth_note.parameters.GetSettingsString();
+        SynthHalfParamsString = synth_half.parameters.GetSettingsString();
     }
 
     void Update()
