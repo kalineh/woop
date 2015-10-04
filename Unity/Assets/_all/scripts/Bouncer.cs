@@ -5,7 +5,7 @@ public class Bouncer
 	: MonoBehaviour
 {
     public SfxrSynth Synth = new SfxrSynth();
-    private string SynthParamsString;
+    public string SynthParamsString = "";
 
     public int Height = 0;
     public int GridX = 0;
@@ -13,23 +13,19 @@ public class Bouncer
 
     public bool Controlled = false;
 
-    void OnDisable()
-    {
-        SynthParamsString = Synth.parameters.GetSettingsString();
-    }
-
     void OnEnable()
     {
-        if (SynthParamsString != null)
+        if (string.IsNullOrEmpty(SynthParamsString))
         {
-            Synth.parameters.SetSettingsString(SynthParamsString);
+            Synth.parameters.GeneratePickupCoin();
+            SynthParamsString = Synth.parameters.GetSettingsString();
         }
+
+        Synth.parameters.SetSettingsString(SynthParamsString);
     }
 
     void Start()
     {
-        SynthParamsString = Synth.parameters.GetSettingsString();
-
         var disco = FindObjectOfType<Disco>();
 
         GridX = (int)Random.Range(0.0f, disco.GridCountX);
