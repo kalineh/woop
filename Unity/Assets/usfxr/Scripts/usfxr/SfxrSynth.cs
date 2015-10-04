@@ -983,7 +983,7 @@ public class SfxrSynth {
 		Transform transformToUse = _parentTransform;
 
 		// If no parent assigned, use main camera by default
-		if (transformToUse == null) transformToUse = Camera.main.transform;
+		if (transformToUse == null && Camera.main != null) transformToUse = Camera.main.transform;
 
 		// If has any parent (assigned, or main camera exist) assigns it
 		if (transformToUse != null) _gameObject.transform.parent = transformToUse;
