@@ -84,6 +84,7 @@ public class Bouncer
         GridX = (int)Mathf.Clamp(pos.x / disco.GridSize.x, 0.0f, disco.GridCountX);
         GridY = (int)Mathf.Clamp(pos.z / disco.GridSize.z, 0.0f, disco.GridCountY);
 
-        Height = (int)Mathf.Clamp(pos.y / disco.GridSize.y, 0.0f, disco.GridCountHigh);
+        // clamp for beat counts
+        Height = (int)Mathf.Clamp(pos.y / disco.GridSize.y, 2.0f, disco.GridCountHigh - 1);
     }
 }
